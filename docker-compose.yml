@@ -7,5 +7,3 @@ services:
     container_name: agileflow-landing
     ports:
       - "8080:8080"
-    volumes:
-      - .:/app
