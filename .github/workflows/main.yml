@@ -19,3 +19,22 @@ jobs:
         run: docker build --file Dockerfile -t ${{ env.IMAGE_NAME }} .
       - name: Push Docker Image
         run: docker push ${{ env.IMAGE_NAME }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to Droplet
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: 22
+          script: |
+            export IMAGE_NAME=${{ env.IMAGE_NAME }}
+            export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+            export DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            cd agileflow-landing
+            docker-compose down || true
+            docker-compose up -d
