@@ -34,7 +34,7 @@ jobs:
             export IMAGE_NAME=${{ env.IMAGE_NAME }}
             export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
             export DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}
-            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
             cd agileflow-landing
             docker-compose down || true
             docker-compose up -d
