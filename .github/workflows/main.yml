@@ -39,3 +39,4 @@ jobs:
             cd agileflow-landing
             docker compose down || true
             docker compose up -d
+            docker image prune -f
